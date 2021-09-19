@@ -2,17 +2,16 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {NavLink} from 'react-router-dom';
 
-import {authMeThunk, logoutThunk} from '../redux/authReducer';
+import {logoutThunk} from '../redux/authReducer';
 
 class HeaderContainer extends React.Component {
 
-  componentDidMount(){    
-    this.props.getAuth();
+/*  componentDidMount(){
+      this.props.getCaptcha();
   }
+*/
 
   render(){
-    console.log(this.props);  
-
     return <>
               {this.props.login && this.props.login}
               {this.props.login && <button onClick={this.props.logout}>logout</button>}
@@ -37,6 +36,6 @@ const mapStateToProps = (state) => {
   }; 
 };
 
-export default connect(mapStateToProps, {getAuth: authMeThunk, logout: logoutThunk})(HeaderContainer);
+export default connect(mapStateToProps, {logout: logoutThunk})(HeaderContainer);
 
 // //if(!this.props.isAuth) return <Redirect to="login" />

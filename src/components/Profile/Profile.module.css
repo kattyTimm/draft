@@ -1,0 +1,18 @@
+.profileInfoBlock{
+	border: 1px dotted grey;
+}
+.contactsBlock{
+	margin-top: 20px;
+}
+
+.contactsTitle{
+	font-weight: bold;
+}
+
+.commonError{
+	color: red;
+	border: 1px solid orange;
+}
+.errorBorder{
+	border: 1px solid red;
+}

@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Field, reduxForm } from 'redux-form';
 
 import {createFiled} from '../../common/createFiled';
 import {requiredField, minLength} from '../../common/validators';
 import {Input} from '../../common/formControl';
+import s from './login.module.css';
 
 const minLength_2 = minLength(2);
 
 let Login = props => {
+
+  let [captchaText, setCaptchaText] = useState('');
 
   return (
     <form onSubmit={props.handleSubmit}>
@@ -24,7 +27,16 @@ let Login = props => {
         <label htmlFor='rememberMe'>remember Me</label>
         <Field name='rememberMe'component={Input} type='checkbox'  />
      </div>   
-    
+
+       {props.captcha &&
+          <>
+            <img src={props.captcha} />
+            <label htmlFor='captcha'>remember Me</label>
+            <Field name='captcha'component={Input} type='text' validate={[requiredField]} />
+          </>
+       }
+       
+       {props.error && <div className={s.formCommonError}>{props.error}</div>}
        <button type="submit">Submit</button>
     </form>
   )
@@ -37,6 +49,16 @@ const LoginReduxForm = reduxForm({
 
 export default LoginReduxForm;
 
-/*   { createFiled('email', 'input', 'text', 'email', [requiredField, minLengthTWO]) }
-       { createFiled('password', 'input', 'password', 'password', [requiredField]) }
-       { createFiled('rememberMe', 'input', 'checkbox', 'remember me') }*/
+/*   
+{props.captcha && 
+                <>
+                  <img src={props.captcha} />
+                   <div>
+                      <label htmlFor='captcha'>captcha</label>
+                      <Field name='captcha'component={Input} type='text' validate={ [requiredField] } />
+                   </div> 
+                </>
+        }
+
+
+*/

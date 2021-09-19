@@ -3,9 +3,22 @@ import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
 
 import {loginThunk} from '../../redux/authReducer';
-import Login from './Login';
+import Login from './Login'; 
 
 class LoginContainer extends React.Component{
+
+	constructor(props, state){
+		super(props, state);
+
+		this.props = props;
+        this.state = state;
+
+        this.state = {
+        	editVode: false,
+        	captchaText : ''
+
+        };
+	}
 
     onSubmit = (formData) => {
     	let {email, password, rememberMe} = formData;
@@ -17,14 +30,16 @@ class LoginContainer extends React.Component{
         if(this.props.isAuth) return <Redirect to='/profile' />
 
 	    return <> 
-	             <Login onSubmit={this.onSubmit}/>
+	             <Login onSubmit={this.onSubmit} captcha={this.props.captcha} />
+	             
 	           </>  
     }       
 }
 
 const mapStateToProps = (state) => {
 	return {
-		isAuth: state.auth.isAuth
+		isAuth: state.auth.isAuth,
+		captcha: state.auth.captcha
 	};
 };
 
