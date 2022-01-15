@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/draft/static/css/main.ad6289e7.chunk.css",
+    "main.js": "/draft/static/js/main.fd8725c9.chunk.js",
+    "main.js.map": "/draft/static/js/main.fd8725c9.chunk.js.map",
+    "runtime-main.js": "/draft/static/js/runtime-main.4542ca95.js",
+    "runtime-main.js.map": "/draft/static/js/runtime-main.4542ca95.js.map",
+    "static/js/2.733046d2.chunk.js": "/draft/static/js/2.733046d2.chunk.js",
+    "static/js/2.733046d2.chunk.js.map": "/draft/static/js/2.733046d2.chunk.js.map",
+    "static/js/3.f313ca22.chunk.js": "/draft/static/js/3.f313ca22.chunk.js",
+    "static/js/3.f313ca22.chunk.js.map": "/draft/static/js/3.f313ca22.chunk.js.map",
+    "index.html": "/draft/index.html",
+    "static/css/main.ad6289e7.chunk.css.map": "/draft/static/css/main.ad6289e7.chunk.css.map",
+    "static/js/2.733046d2.chunk.js.LICENSE.txt": "/draft/static/js/2.733046d2.chunk.js.LICENSE.txt",
+    "static/media/Bean_Eater_420px.02114c63.gif": "/draft/static/media/Bean_Eater_420px.02114c63.gif",
+    "static/media/logo.6ce24c58.svg": "/draft/static/media/logo.6ce24c58.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.4542ca95.js",
+    "static/js/2.733046d2.chunk.js",
+    "static/css/main.ad6289e7.chunk.css",
+    "static/js/main.fd8725c9.chunk.js"
+  ]
+}
