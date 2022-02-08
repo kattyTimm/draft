@@ -1,5 +1,23 @@
 .formCommonError{
-	border: 1px solid red;
-	color: orange;
-	font-weight: bold;
+	color: red;
+}
+
+.formCommonError td{
+ /*    border-bottom: 1px solid red;
+	border-radius: 5px;*/
+	padding-left: 25%;
+	
+}
+
+.loginPageTmp{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+    border-radius: 10px;
+	background-color: rgb(176, 196, 222, .5);
+	padding: 15px;
+}
+
+.loginPageTmp button{
+	cursor: pointer;
 }

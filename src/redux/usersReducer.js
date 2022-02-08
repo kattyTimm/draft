@@ -10,7 +10,7 @@ const TOGGLE_FOLLOWING_PROGRESS = 'TOGGLE_FOLLOWING_PROGRESS';
 
 let initialState = {
    items: [],
-   count: 10, // page size
+   count: 7, // page size
    page: 1, // number of portion of items 
    currentPage: 1,
    isFetching: true,
@@ -55,11 +55,10 @@ const userReducer = (state = initialState, action) => {
        return {...state, totalUsers: action.total};
      };
 
-     case TOGGLE_FOLLOWING_PROGRESS :{
-
-     return {...state, followingProgress: action.isFetching ? [...state.followingProgress, action.id] 
-                                                            : state.followingProgress.filter(id => id != action.id)};
-           
+     case TOGGLE_FOLLOWING_PROGRESS:{
+       
+     return {...state, followingProgress: action.isFetching ? [...state.followingProgress, action.id]
+                                                            : state.followingProgress.filter(id => id !== action.id)};
      };
      default: return state;
   }
@@ -67,11 +66,11 @@ const userReducer = (state = initialState, action) => {
 
 
 /*
-     case SET_CURRENT_PAGE: {
-         return {...state, currentPage: action.page};
-     };
-     case SET_TOTAL_USERS_COUNT: {
-          return {...state, totalUsers: action.total};
+     case TOGGLE_FOLLOWING_PROGRESS :{
+
+     return {...state, followingProgress: action.isFetching ? [...state.followingProgress, action.id] 
+                                                            : state.followingProgress.filter(id => id != action.id)};
+           
      };
 
 */
@@ -87,6 +86,30 @@ const unFollowAC = (userId) => ({type: SET_TOGGLE_UnFOLLOW, userId});
 
 export const toggle_followingProgress_AC = (isFetching, id) => ({type: TOGGLE_FOLLOWING_PROGRESS, isFetching, id});
 
+
+export const unFollowThunk_ = userId => dispatch => {
+    dispatch(toggle_followingProgress_AC(true, userId));
+
+    usersApi.unFollow(userId).then(resp => {
+      if(resp.data.resultCode === 0){
+          dispatch(toggleIsFetchingAC(false));
+          dispatch(unFollowAC(userId));
+      }
+    });
+    dispatch(toggle_followingProgress_AC(false, userId));
+};
+
+export const followThunk_ = userId => dispatch => {
+    dispatch(toggle_followingProgress_AC(true, userId));
+
+    usersApi.follow(userId).then(resp => {
+      if(resp.data.resultCode === 0){
+          dispatch(toggleIsFetchingAC(false));
+          dispatch(followAC(userId));
+      }
+    });
+    dispatch(toggle_followingProgress_AC(false, userId));
+};
 
 export const unFollowThunk = (userId) => dispatch => {
   dispatch(toggle_followingProgress_AC(true, userId));

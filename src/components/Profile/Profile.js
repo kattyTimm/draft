@@ -1,76 +1,113 @@
 import React, {useEffect, useState} from 'react';
 import { Field, reduxForm } from 'redux-form';
+import s from './Profile.module.css';
 
 import ProfileStatus from './ProfileStatusWithHooks';
 import AboutMeComponent from './AboutMeComponent';
 import ProfileInfo from './ProfileInfo';
+import Preloader from '..//Preloader/Bean Eater-1s-200px.gif';
+import preloadStls from '../Users/Users.module.css'; 
 
 import userPhoto_64 from '../../assets/imgs/userPhoto_64.png';
 import {Textarea_3} from '../../common/formControl';
 import {minLength} from '../../common/validators';
 
-/*  <div>
-     {props.profile.aboutMe}
-  </div>
-*/
+//   <AboutMeComponent profile={props.profile} />     здесь было Viiiii
 
 const minLength_2 = minLength(2);
-//!! заюзай здесь useEffect, чтобы перезагружалась когда обновится фото
-const Profile = props => {
-/*  console.log(props)
 
+const Profile = props => {
+
+    console.log(props.isOwner)
+/* 
   let [photos, setPhoto] = useState(props.profile.photos.large);
 
   useEffect(() => {
      setPhoto(props.profile.photos.large);  
   }, [props.profile.photos.large] ); 
 */
-  
-  if(!props.profile) return <div>'крутилка'</div>
+
+  const [value, setValue] = useState('');
 
   const onSubmit = (data) => {
-     props.addPost(data.newPost);
+    if(data.newPost){
+        props.addPost(data.newPost)
+        setValue(''); 
+    }
+   
   };  
 
 
 const onLoadPhoto = (e) => {
     if(e.target.files.length){
-       props.updatePhoto(e.target.files[0], props.autorizedUserId);  
+        props.updatePhoto_My(e.target.files[0], props.autorizedUserId);
            
      }
-  }
+  };
 
-
-
+    if(!props.profile) return  <div className={preloadStls.preloaderDiv}>
+                                  <img src={Preloader} />
+                                </div>
+   
 	return <div>  
-              <div>
-                 <img src={props.profile.photos.large ? props.profile.photos.large : userPhoto_64} />
-                 {props.isOwner && <input  type='file' onChange={onLoadPhoto} />}
+               <div className={s.profileContainer}>   
+
+               <div className={s.avaTmp}>
+                 <img src={props.profile.photos.large ? props.profile.photos.large : userPhoto_64} 
+                      className={s.ava} width="200" height="200 " />
+                 {props.isOwner && <div><input  type='file' onChange={onLoadPhoto} title="" /></div>}
+               </div>
+
+               <div className={s.contactsTmp}>
+
+                   <ProfileStatus status={props.status} updateStatus={props.updateStatus} 
+                                                        updateStatus_My={props.updateStatus_My} />
+                           
+
+                   <ProfileInfo profile={props.profile} match={props.match} isAuth={props.isAuth} 
+                                 autorizedUserId={props.autorizedUserId} isOwner={props.isOwner}
+                                 updateProfile={props.updateProfile} updateProfile_My={props.updateProfile_My}/>   
+                
+               </div>
               </div>
-
-          
-              <div>               
-                <AboutMeComponent profile={props.profile} />  
-                <ProfileStatus status={props.status} updateStatus={props.updateStatus}/>
-                <ProfileInfo profile={props.profile} match={props.match} isAuth={props.isAuth} 
-                             autorizedUserId={props.autorizedUserId} isOwner={props.isOwner}
-                             updateProfile={props.updateProfile} /> 
-              </div>
-
-             <PostFormReduxForm onSubmit={(e) => {onSubmit(e) }} />
-
-             <MiniApp />
+  
+              {props.isOwner &&
+                  <div className={s.postFormTmp}>  
+                    <PostFormReduxForm onSubmit={onSubmit} value={value}  />
+                  </div>
+              }
+             
           </div>
 
 }
 
 const PostForm = (props) => {
 
+    const stylesArea = {
+        paddingTop: '15px',
+        display: 'flex',
+        justifyContent: 'center'   
+    }; 
+
    return  <form onSubmit={props.handleSubmit}>
-               <Field name='newPost' component={Textarea_3} validate={minLength_2} placeholder='enter you post'/>
-               <button type="submit">add post</button>
+               <div style={stylesArea}>
+                  <Field className={s.postArea} name='newPost' component={Textarea_3} validate={[]} placeholder='введите сообщение'/>
+                </div>
+
+               <div style={stylesArea}>
+                 <button style={{marginBottom: '15px', cursor: 'pointer'}}>опубликовать</button>
+              </div>
             </form>
 };
+
+
+const PostFormReduxForm = reduxForm({
+     form: 'addPost'
+  })(PostForm);
+
+
+export default Profile;
+
 
 
 const MiniApp = () => {
@@ -175,12 +212,6 @@ const Tester = () => {
   </div>
 };
 
-
-const PostFormReduxForm = reduxForm({
-     form: 'addPost'
-  })(PostForm);
-
-export default Profile;
 
 /*
 

@@ -1,9 +1,66 @@
-.smallAva{
+
+
+.itemTmp{
+	margin-bottom: 15px;
+	display: flex;
+}
+
+.leftSide{
+	background-color: rgb(176, 196, 222, .5);
+	border-radius: 10px;
+	margin-right: 15px;
+	padding: 15px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.leftSide img{
 	width: 50px;
 	height: 50px;
 	border-radius: 50%;
+	border: 1px dotted grey;
+}
+
+.rightSide{
+    background-color: rgb(176, 196, 222, .5);
+	border-radius: 10px;
+	padding: 15px;
+
+	width:  100%;
+}
+
+.title{
+   padding-right: 30px;
+}
+
+.pgnsBlock{
+	background-color: rgb(176, 196, 222, .5);
+	border-radius: 10px;
+	margin-bottom: 15px;
+	padding: 15px;
+
+	display: flex;
+	justify-content: center;
+}
+
+.page{
+	margin-right: 5px;
+	cursor: pointer;
+}
+
+.page:active{
+	color: rgb(250, 250, 210);
 }
 
 .activePage{
-	color: red;
+	color: rgb(230, 230, 250);
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.preloaderDiv{
+	display: flex;
+	justify-content: center;
 }

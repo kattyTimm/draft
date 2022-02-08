@@ -9,7 +9,119 @@ import {minLength, requiredField} from '../../common/validators';
 
 const minLength_2 = minLength(2);
 
+
 const ProfileInfo = props => {
+
+  const [editMode, setEditMode] = useState(false);
+
+  const onhandleSubmit = formData => {
+      console.log(formData);
+      props.updateProfile_My(formData);
+      setEditMode(false);
+  };
+
+  return <> 
+            {editMode && <ProfileEditComponent_ReduxForm profile={props.profile} onSubmit={onhandleSubmit} initialValues={props.profile} />}
+            {!editMode && <Profile_YouSelf profile={props.profile} setEditMode={setEditMode} isOwner={props.isOwner} />} 
+         </>
+};
+
+
+const Profile_YouSelf = props => {
+
+    return (<div className={s.infoTmp}>
+              <table>
+
+                  <tr>
+                    <td>имя: </td>
+                    <td>{props.profile.fullName}</td>
+                  </tr> 
+
+                  <tr>
+                     <td>обо мне: </td> 
+                     <td>{props.profile.aboutMe}</td>
+                  </tr>
+
+                  <tr>                  
+                   <td>ищу работу:</td>
+                   <td>{props.profile.lookingForAJob ? "да" : "нет"}</td>
+                 </tr>
+
+                {props.profile.lookingForAJob &&  
+                 <tr>
+                    <td>описание: </td>
+                    <td>{props.profile.lookingForAJobDescription}</td>
+                 </tr>
+                }  
+                 
+                <tr>
+                  <td>контакты:</td>
+                </tr>
+                
+                 {Object.keys(props.profile.contacts).map((c, i) =>  {                
+                     return (props.profile.contacts[c] !== null) ? <Contact_3 key={i} objectKey={c} constact={props.profile.contacts[c]} />  : ''
+                  })}             
+
+                  {props.isOwner && <tr><td><button onClick={() => props.setEditMode(true)}>редактировать</button></td></tr>}
+
+            </table>
+            </div>);
+};
+
+
+
+const ProfileEditComponent = props => {
+
+  return <form onSubmit={props.handleSubmit} className={(props.error) ? s.errorBorder : ''} className={s.infoTmp}>
+            <table>
+             <tr>
+                <td><label htmlFor='fullName'>имя:</label></td>
+                <td><Field name='fullName'component={Input} type='text' validate={ [requiredField, minLength_2]} /></td>
+             </tr> 
+
+              <tr>
+                <td><label htmlFor='aboutMe'>обо мне: </label></td>
+                <td><Field name='aboutMe'component={Input} type='text' validate={ null} /></td>
+              </tr> 
+
+               <tr>
+                <td><label htmlFor='lookingForAJob'>ищу работу: </label></td>
+                <td><Field name='lookingForAJob'component={Input} type='checkbox' validate={null} /></td>
+              </tr>
+
+               <tr>
+                <td><label htmlFor='lookingForAJobDescription'>описание:</label></td>
+                <td><Field name='lookingForAJobDescription'component={Textarea_3} type='checkbox' validate={minLength_2} /></td>
+              </tr>
+
+              <tr>
+                <td>контакты :</td>
+              </tr>
+
+                   {Object.keys(props.profile.contacts).map((c,i) => {
+                     return <tr key={i}>
+                               <td><label htmlFor={c}>{c}: </label></td>
+                               <td><Field name={'contacts.'+c} component={Input} type='text' validate={minLength_2} /></td>
+                            </tr> 
+                   })}
+              
+
+             {props.error && <div className={s.commonError}>
+                               {props.error}
+                          </div>}    
+
+             <tr>
+                <td><button>отправить</button></td>
+             </tr>
+          </table>
+         </form>
+
+};
+
+const ProfileEditComponent_ReduxForm = reduxForm({form: 'profileEditComponent'})(ProfileEditComponent);
+
+
+const ProfileInfo_ = props => {
 
   let [editMode, setEditMode] = useState(false);
 
@@ -31,16 +143,13 @@ const ProfileInfo = props => {
 }
 
 
-const Contact = props => {
-   return <div> 
-             {props.objectKey}: {props.value}  
-          </div>   
-};
-
-const Contact_2 = props => {
-  return <div>
-              <b>{props.objectKey}:</b> <i>{props.value}</i>
-         </div>   
+const Contact_3 = props => {
+   return  <>{props.constact.length > 0 &&
+              <tr>
+                <td >{props.objectKey}: </td>
+                <td><a href={props.constact} target="_blanck">{props.constact}</a></td>
+              </tr>           
+           }</>
 };
 
 
@@ -60,12 +169,13 @@ const ProfileData = props => {
                    <span>{props.profile.lookingForAJobDescription}</span>
                }
              
-               {Object.keys(props.profile.contacts).map((c, i) => <Contact_2 key={i}  objectKey={c} value={props.profile.contacts[c]} />) }
+              {Object.keys(props.profile.contacts).map((c, i) => <Contact_3 key={i}  objectKey={c} constact={props.profile.contacts[c]} />) }
 
-               {props.isOwner && <button onClick={ () => props.setEditMode(true) }>edit</button>}
+              {props.isOwner && <button onClick={ () => props.setEditMode(true) }>edit</button>}
          </div>
         ) 
 };
+
 
 
 const EditProfile = props => {
@@ -102,62 +212,10 @@ const EditProfile = props => {
          </form>
 };
 
-/*
-    <div><b>contacts :</b>
-                {Object.keys(props.profile.contacts).map((c, i) => {
-                   return <div key={i}>
-                              <span>
-                                <label htmlFor={c}>{c}: </label>
-                                <Field name={'contacts.'+c} component={Input} type='text' validate={minLength_2} />
-                              </span>
-                          </div>  
-                })}
-              </div>
-
-*/
-
 const EditProfileReduxForm = reduxForm({
    form: 'editProfile'
 })(EditProfile);
 
+
+
 export default ProfileInfo;
-
-/*
-
- <div>
-              <label htmlFor='fullName'>name</label>
-              <Field name='fullName'component={Input} type='text' validate={ [requiredField, minLength_2]} />
-           </div> 
-            <div>
-              <label htmlFor='aboutMe'>about me</label>
-              <Field name='aboutMe'component={Input} type='text' validate={ [requiredField, minLength_2]} />
-            </div> 
-             <div>
-              <label htmlFor='lookingForAJob'>looking job</label>
-              <Field name='lookingForAJob'component={Input} type='checkbox' validate={null} />
-            </div>
-             <div>
-              <label htmlFor='lookingForAJobDescription'>job description</label>
-              <Field name='lookingForAJobDescription'component={Textarea_3} type='checkbox' validate={minLength_2} />
-            </div>
-            <div><b>contacts :</b>
-              {Object.keys(props.profile.contacts).map((c, i) => {
-                 return <div key={i}>
-                            <span>{c} :</span>
-                            <span>
-                              <label htmlFor={c}>job description</label>
-                              <Field name={c}component={Input} type='text' validate={minLength_2} />
-                            </span>
-                        </div>  
-              })}
-            </div>
-          <button>send</button>
-
-aboutMe: "ok"
-contacts: {facebook: "vk.com", website: null, vk: null, twitter: null, instagram: null, …}
-fullName: "Katty"
-lookingForAJob: true
-lookingForAJobDescription: "react"
-photos: {small: "https://social-network.samuraijs.com/activecontent/images/users/6858/user-small.jpg?v=51", large: "https://social-network.samuraijs.com/activecontent/images/users/6858/user.jpg?v=51"}
-userId: 6858
-*/

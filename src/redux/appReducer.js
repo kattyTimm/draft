@@ -34,16 +34,26 @@ const unCautchedErrors_AC = () => ({type: ALL_UNCAUTCHED_ERRORS});
 const hideErrorMessage_AC = () => ({type: HIDE_ERROR_MESSAGE});
 
 
-export const initialazedThunk = () => async dispatch => {
+export const initialazedThunk = () => dispatch => {
+     let promise = dispatch(authMeThunk());
+     promise.then(resp => {
+        
+        dispatch(setInitialazeAC())
+    });
+}
+
+export const initialazedThunk_ = () => async dispatch => {
 	// вот здесь вся фишка, приложение проициализируется только после того когда вернутся данные с сервера
 	// и следовательно не будет таких ошибок как было у меня в профиле ( если помнишь не всегда успевала вернуться айдиха)
 	// из-за этого был направильный запрос на сервер в апи - блаблабла/profile/undefined
 	// естественно для айди undefined на сервере не находилось ничего
    let promise = await dispatch(authMeThunk());
+   console.log(promise);
 
  //  Promise.all([promise]) .then(resp => dispatch(setInitialazeAC()));
    dispatch(setInitialazeAC());
    // promise.then(resp => dispatch(setInitialazeAC()));
+    
 }
 
 export const unCautchedErrorsThunk = () => async dispatch => {

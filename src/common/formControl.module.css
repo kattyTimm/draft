@@ -1,6 +1,12 @@
-.formControl.errorLoginField{
-	border: 1px solid red;
-}
 .formControl{
-	
+	border-radius: 5px;
 }
+
+.errorLoginField{
+	color: red;
+}
+
+.errorLoginField span{
+	margin-left: 15px;
+}
+

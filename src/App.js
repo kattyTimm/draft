@@ -9,9 +9,12 @@ import Navbar from './components/Navbar';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import UsersContainer from './components/Users/UsersContainer';
 import Dialogs from './components/Dialogs';
-import HeaderContainer from './components/HeaderContainer';
+import HeaderContainer from './components/Header/HeaderContainer';
 import LoginContainer from './components/Login/LoginContainer';
-import Learning from './components/Learning.js';
+
+import Preloader from './components/Preloader/Bean Eater-1s-200px.gif';
+import preloadStls from './components/Users/Users.module.css'; 
+//import Learning from './components/Learning.js';
 
 import {initialazedThunk, unCautchedErrorsThunk} from './redux/appReducer';
 
@@ -21,7 +24,7 @@ class App extends React.Component{
     super(state, props);
 
     this.unCautchRejections = this.unCautchRejections.bind(this);
-    this.hide = false;
+    this.hide = true;
   }
 
   unCautchRejections (){
@@ -38,16 +41,26 @@ class App extends React.Component{
      window.removeEventListener('unhandledrejection', this.unCautchRejections);
   }
 
+
+//Пока не пришли данные с сервера надо показать прелоадер!, иначе в запросах повалятся ошибки, 
+//      возвращать компоненты надо только после того как пришли инициализонные данные
+
   render(){
 
-    if(!this.props.initialazed) return 'preloader';
+    if(!this.props.initialazed){
+      return <div className={preloadStls.preloaderDiv}>
+                  <img src={Preloader} />
+                </div>
+    } 
 
     return (
      
           <div className="App">
-              <HeaderContainer />
-              <div className="Navbar">
-                   <Navbar />
+              <div className="header-container">
+                <div className="Navbar">
+                     <Navbar />
+                </div>
+                <HeaderContainer />
               </div>
 
               <div className="content">
@@ -57,13 +70,11 @@ class App extends React.Component{
                   <Route path="/login" render={ () => <LoginContainer />} />
                   <Route path="/profile/:userId?" render={() => <ProfileContainer /> } />
                   <Route path="/users" render={() => <UsersContainer /> } />
-                  <Route path="/dialogs" render={() => <Dialogs /> } />
-                  <Route path="/learning" render={() => <Learning /> } />
+           
                   <Route path='*' render={() => <div>404 not found</div>} /> 
                 </Switch>
 
-                 {this.props.globalUncautched && <div id='error_div'>ooops, some error</div>}
-                 {!this.hide && <p>жопа</p>}
+               
               </div>
              
           </div>
@@ -84,4 +95,14 @@ const mapStateToProps = (state) => {
 export default compose(connect(mapStateToProps, {getInitialaze: initialazedThunk, unCautchedErrorsHandle: unCautchedErrorsThunk}),
                         withRouter)(App);
 
-/* по моему withRouter надо обернкть для того чтобы Route работали корректно, так как тдет обертка connect*/
+/* 
+
+  {this.props.globalUncautched && <div id='error_div'>ooops, some error</div>}
+                 {!this.hide && <p>какое-то нехорошее сообщение</p>}
+
+по моему withRouter надо обернкть для того чтобы Route работали корректно, так как тдет обертка connect*/
+
+      // <Route path="/dialogs" render={() => <Dialogs /> } />
+        //          <Route path="/learning" render={() => <Learning /> } />
+
+

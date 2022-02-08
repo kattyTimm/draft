@@ -1,9 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import s from './Users.module.css';
 
-import {setUsersThunk, setCurrentPageAC, followThunk, unFollowThunk, toggle_followingProgress_AC} from '../../redux/usersReducer';
+import {setUsersThunk, setCurrentPageAC, followThunk, unFollowThunk} from '../../redux/usersReducer';
 import Users from './Users';
-import Preloader from '../Preloader/Bean_Eater_420px.gif';
+import Preloader from '../Preloader/Bean Eater-1s-200px.gif';
 
 
 class UsersContainer extends React.Component  {
@@ -32,7 +33,12 @@ class UsersContainer extends React.Component  {
 
   render(){
 
-    if(this.props.isFetching) return <img src={Preloader} />
+    if(this.props.isFetching){
+        return <div className={s.preloaderDiv}>
+                  <img src={Preloader} />
+                </div>
+    }                                  
+
     else return <Users totalUsers={this.props.totalUsers} count={this.props.count} items={this.props.items} 
                        isFetching={this.props.isFetching} currentPage={this.props.currentPage}
                        followingProgress={this.props.followingProgress}
@@ -56,64 +62,19 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {setUsers: setUsersThunk, 
                                          setCurrPage: setCurrentPageAC, 
                                          follow: followThunk,
-                                         unfollow :unFollowThunk,
-                                         onToggleFollowingProgress: toggle_followingProgress_AC})(UsersContainer);
+                                         unfollow :unFollowThunk})(UsersContainer);
        
-/*
+/* 
+пример как выглядит mapDispatchToProps
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    // explicitly forwarding arguments
+    onClick: (event) => dispatch(trackClick(event)),
 
-  onSetPage = (num) => {
-    this.props.setCurrPage(num);
-    this.props.setUsers(num, this.props.count);
+    // implicitly forwarding arguments
+    onReceiveImpressions: (...impressions) =>
+      dispatch(trackImpressions(impressions)),
   }
 
-
-import {connect} from 'react-redux';
-import Users from './Users';
-import Pagination from '../Pagination/Pagination';
-import {setUsersThunk, FollowThunk, unFollowThunk} from '../../redux/usersReducer';
-import Preloader from '../Preloader/Bean_Eater_420px.gif';
-
-class UsersContainer extends React.Component {
-    componentDidMount(){
-
-    	this.props.setUsers(this.props.count, this.props.currentPage);
-    	console.log(this.props);
-    }
-
-    onPageChange = (selectedPage) => {
- 
-    	 this.props.setUsers(this.props.count, selectedPage); 
-    }
-
-
-	render(){	
-	  return (
-	    <div>
-           {this.props.isFetching ? <img src={Preloader}/> : null} 
-
-	       <Pagination onPageChange={this.onPageChange}  totalCount={this.props.totalCount} 
-	                   pageSize={this.props.count} currentPage={this.props.currentPage}/>
-
-	       <Users count={this.props.count} items={this.props.items} isAuth={this.props.isAuth}
-	              toggleFollowingProgress={this.props.toggleFollowingProgress} isFetching={this.props.isFetching}
-	              follow={this.props.follow} unFollow={this.props.unFollow}/>
-	    </div>
-	  );
-	}  
-}
-
-const mapStateToProps = (state) => {
-	return {
-      currentPage: state.users.currentPage,
-      count: state.users.count,
-      totalCount: state.users.totalCount,
-      items: state.users.items,
-      isFetching: state.users.isFetching,
-      isAuth: state.auth.isAuth,
-      toggleFollowingProgress: state.users.toggleFollowingProgress
-	};
-};
-
-export default connect(mapStateToProps, {setUsers: setUsersThunk, follow: FollowThunk, unFollow: unFollowThunk})(UsersContainer);
 */

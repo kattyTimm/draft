@@ -5,7 +5,7 @@ const CommonPropertiesFields = ({input, meta, ...props}) => {
   
   const hasError = meta.error && meta.visited;
 
-     return <span className={hasError ? s.formControl + ' ' + s.errorLoginField : ''}>             
+     return <span className={hasError ? s.errorLoginField : ''}>             
               {props.children}
               {hasError && <span>{meta.error}</span>}
             </span>
@@ -14,42 +14,29 @@ const CommonPropertiesFields = ({input, meta, ...props}) => {
 
 export const Textarea_3 = (props) => {
 	let {input, meta, ...restProps} = props;
+
+    const styles = {
+        borderRadius: '5px'
+      }; 
+
+    if(meta.error && meta.visited)  styles.border = '2px solid red' ;    
+
 	return <CommonPropertiesFields {...props}>
-               <textarea {...input} {...restProps} />
+               <textarea {...input} {...restProps} style={styles} />
 	       </CommonPropertiesFields>
 };
 
 export const Input = (props) => {
   let {input, meta, ...restProps} = props;
-  return <CommonPropertiesFields {...props}><input {...input} {...restProps} /></CommonPropertiesFields>   
+
+  const styles = {
+    borderRadius: '5px'
+  }; 
+
+  if(meta.error && meta.visited)  styles.border = '2px solid red' ;
+    
+  return <CommonPropertiesFields {...props}>
+            <input {...input} {...restProps} style={styles} />
+         </CommonPropertiesFields>   
 };
 
-
-export const Textarea = (props) => {
-    let {input, meta, ...restProps} = props;
-      
-    return <CommonPropertiesFields {...props}><textarea {...input} {...restProps} /></CommonPropertiesFields>
-};
-
-/* 
-
-export const Textarea_2 = ({meta, input, ...props}) => {
-  
-   return <div className={(meta.error ? s.formControl + ' ' + s.errorLoginField : '')}>
-             <textarea  {...props.input} {...props}/>
-          </div> 
-          {meta.error && <span>{meta.error}</span>}
-};
-
-*/
-
-/*
-const CommonField = ({input, meta, child, props}) => {
-	const hasError = meta.error && meta.visited;
-
-	return <div className={(hasError ?  s.formControl + ' ' + s.errorLoginField : '')}>
-	        {props.children}
-	        {hasError && <span>{meta.error}</span>}
-	       </div>
-};
-*/

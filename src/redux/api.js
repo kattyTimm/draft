@@ -5,9 +5,19 @@ let instance =  axios.create({
   baseURL: 'https://social-network.samuraijs.com/api/1.0/',
   withCredentials: true,
   headers: {
-            'API-KEY': '43040dd6-0e63-4499-9314-9afff1dbb86e_22'
+            'API-KEY': '43040dd6-0e63-4499-9314-9afff1dbb86e' 
            }
 });
+
+
+export const dialogsApi = {
+   getAllDialogs: () => {return instance.get(`dialogs`);}, // get all dialogs
+
+   getUserDialogs(userId){ 
+      return instance.get(`dialogs/${userId}/messages`); }, // get list of messages with your friend
+   startDialogs(userId){
+     return instance.put(`dialogs/${userId}`, userId);} //start chatting, refresh your companion so that he was on top
+};
 
 export const securityApi = {
   getCaptcha (){return instance.get(`security/get-captcha-url`);}
@@ -20,6 +30,27 @@ export const authApi = {
     },
     logout: function (){return instance.delete(`auth/login`);} 
 }
+
+export const loginApi = {
+    login: function(email, password, rememberMe = false, captcha = ''){
+             return instance.post(`auth/login`, {email, password, rememberMe, captcha});
+           },
+    logout(){return instance.delete(`auth/login`);}       
+};
+
+export const profileApi_ = {
+  getProfile: userId => {return instance.get(`profile/${userId}`);},
+  getStatus(userId){ return instance.get(`profile/status/${userId}`);},
+  updateStatus(text) {return instance.put(`profile/status`, {status: text});},
+  updateProfile (data) {return instance.put(`profile`, data);},
+  updatePhoto: function(file){
+    let formData = new FormData();
+    formData.append('image', file);
+ 
+    return instance.put(`profile/photo`, formData, {
+         headers: {'Content-Type': 'multipart/form-data'}
+    });}
+};
 
 export const profileApi = {
     getProfile: (id) => {return instance.get(`profile/${id}`); },

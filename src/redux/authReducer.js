@@ -35,8 +35,9 @@ const authReducer = (state = initialState, action) => {
     };
 };
 
+
 const authMeAC = (id, login, email) => ({type: AUTH_ME, data: {id, login, email} });
-const logoutAC = (id, login, email) => ({type: LOGOUT, data: {id, login, email} });
+export const logoutAC = (id, login, email) => ({type: LOGOUT, data: {id, login, email} });
 const getCaptcha_AC = url => ({type: GET_CAPTCHA_URL, payload: {captcha: url}});
 
 
@@ -47,7 +48,8 @@ const getCaptchaThunk = () => dispatch => {
 };
 
 export const authMeThunk = () =>  dispatch => {
-      return authApi.me().then(resp => {
+      return authApi.me().then(resp => {         
+
          if(resp.data.resultCode === 0){
              let {id, login, email} = resp.data.data;
              dispatch(authMeAC(id, login, email)); 
@@ -59,10 +61,11 @@ export const authMeThunk = () =>  dispatch => {
 export const  loginThunk = (email, password, rememberMe = false, captcha = '') => dispatch => {
   authApi.login(email, password, rememberMe, captcha).then(resp => {
     if(resp.data.resultCode === 0){
-          console.log(dispatch(authMeThunk()));
-    }else{
-      dispatch(getCaptchaThunk());
 
+          dispatch(authMeThunk());
+    }else{
+     // dispatch(getCaptchaThunk());
+     
       let action = stopSubmit('login', {_error: resp.data.messages[0]});
       dispatch(action); /// Задиспатчить обязательно!!!
     } 
@@ -79,21 +82,3 @@ export const logoutThunk = () => dispatch => {
 
 export default authReducer;
 
-/*
-
-export const getCaptchaThunk = () => dispatch => {
-  securityApi.getCaptcha().then(resp => {
-     console.log(resp);
-     dispatch(getCaptcha_AC(resp.data.url));
-  });
-};
-
-case GET_CAPTCHA_URL:{
-        return {...state, ...action.payload};
-      }
-
-
-      const getCaptcha_AC = captcha => ({type: GET_CAPTCHA_URL, payload: {captcha} });
-
-
-*/

@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import s from './Profile.module.css';
 
 import {Input} from '../../common/formControl';
 import {minLength} from '../../common/validators';
@@ -8,30 +9,44 @@ const ProfileStatusWithHooks = props => {
 
   let [editMode, setEditMode] = useState(false);
   let [status, setStatus] = useState(props.status);
+  let [status_, setStatus_] = useState(props.status);
 
   useEffect(() => {
-     setStatus(props.status);  
+  
+     setStatus_(props.status);  
   }, [props.status] );
 
-  const onStatusChange = (e) => {
-    setStatus(e.target.value);
-    console.log(status);
-  }
 
   const onUpdateStatus = () => {
     props.updateStatus(status);
     setEditMode(false);
   }
 
-	return  <div> 
+  const onUpdateStatus_ = () => {
+     props.updateStatus_My(status_);
+     setEditMode(false);
+  }
+
+   const startEdit = () => {
+    setEditMode(true);
+  }
+
+	return  <div className={s.statusTmp}> 
+               <span style={{marginRight: '10px'}}>
+                   статус: 
+                </span>
+
                {editMode && 
-                  <input autoFocus={true} value={status}  onChange={ (e) => onStatusChange(e)} onBlur={(e) => onUpdateStatus() }/>               
+                   <input autoFocus={true} value={status_} onChange={e => setStatus_(e.target.value)} onBlur={() => onUpdateStatus_()} /> 
                } 
-               {!editMode &&
-                 <div onDoubleClick={() => {setEditMode(true)} }>
-                    {props.status || '--------------'} 
-                 </div> 
-               } 
+                {!editMode && 
+                   <div >
+                      <span onClick={() => startEdit()}>
+                         {status_ || 'write you status'}
+                      </span>                      
+                   </div>
+               }
+
             </div>
 
 }
@@ -39,4 +54,11 @@ const ProfileStatusWithHooks = props => {
 
 export default ProfileStatusWithHooks;
 
-/*(e) => onStatusChange(e)*/
+/*{editMode && 
+                  <input autoFocus={true} value={status}  onChange={ (e) => onStatusChange(e)} onBlur={(e) => onUpdateStatus() }/>               
+               } 
+               {!editMode &&
+                 <div onDoubleClick={() => {setEditMode(true)} }>
+                    {props.status || '--------------'} 
+                 </div> 
+               }*/

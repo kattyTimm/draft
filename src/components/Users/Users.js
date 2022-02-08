@@ -22,12 +22,11 @@ const Users = (props) => {
  let rightLimit = portionNumber * portionSize; // 15 , 30 , 45
 
  let pageItems = pageArr.filter(p => p >= leftLimit && p <= rightLimit).map((p, i) => {
-   return <span key={i} className={p === props.currentPage ? s.activePage : ''} onClick={() => props.onSetPage(p)}>
+   return <span key={i} className={p === props.currentPage ? s.activePage : '' + ' ' + s.page} onClick={() => props.onSetPage(p)}>
              {p} &nbsp;
           </span> 
  });
  
-
 
   // не используется
   let pages = pageArr.map((p, i) => { 
@@ -37,26 +36,41 @@ const Users = (props) => {
 
 
  let users = props.items.map((u, i) => {
- 	return <div key={i}>
- 	           <div> 
+ 	return <div key={i} className={s.itemTmp}>
+
+ 	         <div className={s.leftSide}> 
+
 	               <NavLink to={`/profile/${u.id}`}>
 	                    <img src={u.photos.small ? u.photos.small : userPhoto_32} />
 	               </NavLink>
+
+                     {u.followed && <div><button onClick={() => props.unfollow(u.id) } disabled={props.followingProgress.some(id => id === u.id)}>удалить</button></div>}
+                     {!u.followed && <div><button onClick={() => props.follow(u.id)} disabled={props.followingProgress.some(id => id === u.id)}>добавить</button></div>}
                </div>
-               <div> 
-                    <span>name: </span><span>{u.name}</span>
-                    <span> &para; status: </span><span>{u.status}</span>
+
+               <div className={s.rightSide}> 
+                    <table> 
+                         <tr>
+                           <td className={s.title}>имя: </td>
+                           <td>{u.name}</td>
+                         </tr>
+                         <tr>
+                           <td className={s.title}>статус: </td>
+                           <td>{u.status}</td>
+                         </tr>
+                    </table>
                </div>
-               {u.followed && <button onClick={() => props.unfollow(u.id) } disabled={props.followingProgress.some(id => id === u.id)}>unfollw</button>}
-               {!u.followed && <button onClick={() => props.follow(u.id)} disabled={props.followingProgress.some(id => id === u.id)}>follow</button>}
+              
  	       </div>  
  })
 
 
- return <div>     
-           {portionNumber > 1 && <button onClick={() => setPortionNumber(portionNumber - 1)}>&larr;</button>}
-           {pageItems}
-           {portionItems > portionNumber && <button onClick={() => setPortionNumber(portionNumber + 1)}>&rarr;</button>}
+ return <div>  
+           <div className={s.pgnsBlock}>   
+                {portionNumber > 1 && <button className={s.page} onClick={() => setPortionNumber(portionNumber - 1)}>&larr;</button>}
+                {pageItems}
+                {portionItems > portionNumber && <button className={s.page} onClick={() => setPortionNumber(portionNumber + 1)}>&rarr;</button>}
+           </div>
 
           {users}
         </div> 

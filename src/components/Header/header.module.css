@@ -1,0 +1,11 @@
+.exitBtn{
+	position: absolute;
+	right: 20px;
+	top: 15px;
+
+	border-radius: 5px;
+	border: 1px solid silver;
+}
+.exitBtn:hover{
+	cursor: pointer;
+}

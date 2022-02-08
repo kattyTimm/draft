@@ -8,57 +8,58 @@ import s from './login.module.css';
 
 const minLength_2 = minLength(2);
 
-let Login = props => {
+const Login = props => {
+
+  // здесь props.error - это ошибка с сервера
 
   let [captchaText, setCaptchaText] = useState('');
 
   return (
     <form onSubmit={props.handleSubmit}>
+     <table>
+       <tr>
+          <td><label htmlFor='email'>логин:</label></td>
+          <td><Field name='email'component={Input} type='text' validate={ [requiredField, minLength_2]} /></td>
+       </tr> 
 
-     <div>
-        <label htmlFor='email'>email</label>
-        <Field name='email'component={Input} type='text' validate={ [requiredField, minLength_2]} />
-     </div> 
-     <div>
-        <label htmlFor='password'>email</label>
-        <Field name='password'component={Input} type='password' validate={ [requiredField, minLength_2]} />
-     </div> 
-     <div>
-        <label htmlFor='rememberMe'>remember Me</label>
-        <Field name='rememberMe'component={Input} type='checkbox'  />
-     </div>   
+       <tr>
+          <td><label htmlFor='password'>пароль:</label></td>
+          <td><Field name='password'component={Input} type='password' validate={ [requiredField, minLength_2]} /></td>
+       </tr>   
 
-       {props.captcha &&
-          <>
-            <img src={props.captcha} />
-            <label htmlFor='captcha'>remember Me</label>
-            <Field name='captcha'component={Input} type='text' validate={[requiredField]} />
-          </>
-       }
-       
-       {props.error && <div className={s.formCommonError}>{props.error}</div>}
-       <button type="submit">Submit</button>
+         {props.captcha &&
+            <>
+              <img src={props.captcha} />
+              <label htmlFor='captcha'>captcha</label>
+              <Field name='captcha'component={Input} type='text' validate={[requiredField]} />
+            </>
+         }        
+
+         <tr>
+           <td><button type="submit">войти</button></td>
+         </tr>
+
+         {props.error && 
+            <tr className={s.formCommonError}>
+               <td colspan="2">{props.error}</td>
+            </tr>
+          }
+
+       </table>
     </form>
   )
 }
 
 const LoginReduxForm = reduxForm({
-  // a unique name for the form
   form: 'login'
 })(Login);
 
 export default LoginReduxForm;
 
 /*   
-{props.captcha && 
-                <>
-                  <img src={props.captcha} />
-                   <div>
-                      <label htmlFor='captcha'>captcha</label>
-                      <Field name='captcha'component={Input} type='text' validate={ [requiredField] } />
-                   </div> 
-                </>
-        }
-
+    <div>
+          <label htmlFor='rememberMe'>remember Me</label>
+          <Field name='rememberMe'component={Input} type='checkbox'  />
+       </div> 
 
 */

@@ -1,8 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
+import s from './login.module.css';
 
 import {loginThunk} from '../../redux/authReducer';
+// import {login_Thunk} from '../../redux/loginReducer';
 import Login from './Login'; 
 
 class LoginContainer extends React.Component{
@@ -16,23 +18,20 @@ class LoginContainer extends React.Component{
         this.state = {
         	editVode: false,
         	captchaText : ''
-
         };
 	}
 
     onSubmit = (formData) => {
     	let {email, password, rememberMe} = formData;
-    	this.props.login(email, password, rememberMe);
-    	//console.log(email, password, rememberMe);
+    	this.props.login(email, password, rememberMe);    	
     }
 
 	render(){
         if(this.props.isAuth) return <Redirect to='/profile' />
 
-	    return <> 
-	             <Login onSubmit={this.onSubmit} captcha={this.props.captcha} />
-	             
-	           </>  
+	    return <div className={s.loginPageTmp}> 
+	             <Login onSubmit={this.onSubmit} captcha={this.props.captcha} />            
+	           </div>  
     }       
 }
 

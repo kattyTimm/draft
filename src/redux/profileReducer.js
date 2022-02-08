@@ -1,4 +1,4 @@
-import {profileApi, profileApi_2} from '../redux/api';
+import {profileApi, profileApi_2, profileApi_, dialogsApi} from '../redux/api';
 //import store from './store';
 import {stopSubmit} from 'redux-form';
 
@@ -10,9 +10,9 @@ const SET_PHOTO_SUCCESS = 'SET_PHOTO_SUCCESS';
 
 
 let initialState = {
-	profile: null,
+  profile: null,
   status: '',
-  post: [],
+  post: [{id: Date.now(), text: 'Привет'}],
   newPostText: ''
 }
 
@@ -50,6 +50,55 @@ export const setNewPostTextAC = (text) => ({type: ADD_NEW_POST, text});
 const getStatusAC = (text) => ({type: GET_USER_STATUS, status: text});
 const updatePhotoAC = (photos) => ({type: SET_PHOTO_SUCCESS, file: photos});
 // export const createNewPostAC = (text) => ({type: CREATE_NEW_POST_VALUE, text});
+
+
+export const updatePhoto_Thunk = (file,userId) => dispatch => {
+    profileApi_.updatePhoto(file).then(resp => {
+      console.log(resp);
+       if(resp.data.resultCode === 0){
+           dispatch(setProfile_Thunk(userId));
+       }
+    });
+};
+
+export const setProfile_Thunk = userId => dispatch => {
+    profileApi_.getProfile(userId).then(resp => {
+       dispatch(setProfileAC(resp.data));
+    });
+
+ /*   dialogsApi.getAllDialogs().then(resp => {
+        console.log(resp.data);
+    });
+
+    dialogsApi.getUserDialogs(2).then(resp => console.log(resp));
+
+    dialogsApi.startDialogs(2).then(resp => console.log(resp)) */
+};
+
+export const setStatus_Thunk = userId => dispatch => {
+   profileApi_.getStatus(userId).then(resp => {
+      dispatch(getStatusAC(resp.data));
+   });
+};
+
+export const updateStatus_thunk = text => dispatch => {
+   profileApi_.updateStatus(text).then(resp => {
+      if(resp.data.resultCode === 0){
+         dispatch(getStatusAC(text));
+      }
+   });
+};
+
+
+export const updateProfile_Thunk = profile => dispatch => {
+       profileApi_.updateProfile(profile).then(resp => {
+     //   console.log(profile.userId);
+
+        if(resp.data.resultCode === 0){
+          dispatch(setProfile_Thunk(profile.userId))             
+        }
+       });
+};
 
 /*
 aboutMe: "ok"
@@ -105,11 +154,13 @@ export const setUserPrifileThunk = (useId) => async dispatch => {
 		dispatch(setProfileAC(resp.data))
 
 	})*/
+
   try{
     let resp = await profileApi.getProfile(useId);
     dispatch(setProfileAC(resp.data));
   }catch{
-    debugger;
+    console.log(useId);
+    console.log('error 112');
   }
 };
 

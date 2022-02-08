@@ -12,14 +12,13 @@ const AboutMeComponent = props => {
   const updateAboutMe = () => {
     setAboutMe(aboutMe);
        setEditMode(false);
-       console.log(aboutMe);
   }
 
 	return (
           <div>
+          
              {!editMode && 
-                <div onDoubleClick={() => setEditMode(true)}>
-                   {props.profile.aboutMe || ''}
+                <div onDoubleClick={() => setEditMode(true)}>                  
                 </div>
               }
               {editMode && 
