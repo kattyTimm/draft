@@ -70,6 +70,8 @@ class App extends React.Component{
                   <Route path="/login" render={ () => <LoginContainer />} />
                   <Route path="/profile/:userId?" render={() => <ProfileContainer /> } />
                   <Route path="/users" render={() => <UsersContainer /> } />
+
+                  <Route path='/draft' render={() => <Redirect to="profile" />} /> 
            
                   <Route path='*' render={() => <div>404 not found</div>} /> 
                 </Switch>
